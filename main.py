@@ -8,14 +8,19 @@ def main():
     #initialize pygame and set screen dimensions for the game
     pygame.init
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    clock = pygame.time.Clock()
+    dt = 0
 
-    #create an infinite "game" loop
+    #create an infinite "game" loop that creates the GUI and keeps it open
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        screen.fill((0, 0, 0))
+        screen.fill("black")
         pygame.display.flip()
+        
+        #This will set the GUI to run at 60fps
+        dt = clock.tick(60) / 1000
 
     #print information to the user regarding game initialization process
     print("Starting Asteroids!")
