@@ -13,8 +13,17 @@ def main():
     dt = 0
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
+
+    #create 2 groups named updatable and drawable
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    #set both groups as containers for the Player
+    Player.containers = (updatable, drawable)
+
     #create an object of the player class
     player = Player(x, y)
+
+    
 
     #create an infinite "game" loop that creates the GUI and keeps it open
     while True:
@@ -22,24 +31,20 @@ def main():
             if event.type == pygame.QUIT:
                 return
         
-        #call the update method to allow for player turning
-        player.update(dt)
+        #call the update method to allow for player turning using the updatable container
+        updatable.update(dt)
 
         #color the GUI black
         screen.fill("black")
 
-        #draw the player on the screen
-        player.draw(screen)
+        #draw objects in the drawable container to the screen
+        for obj in drawable:
+            obj.draw(screen)
 
         pygame.display.flip()
         
         #This will set the GUI to run at 60fps
         dt = clock.tick(60) / 1000
-
-    #print information to the user regarding game initialization process
-    print("Starting Asteroids!")
-    print(f"Screen width: {SCREEN_WIDTH}")
-    print(f"Screen height: {SCREEN_HEIGHT}")
 
 if __name__ == "__main__":
     main()
