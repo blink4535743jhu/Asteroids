@@ -9,6 +9,8 @@ from constants import *
 from player import *
 from asteroid import *
 from asteroidfield import *
+from shot import *
+
 
 def main():
     #initialize pygame and set screen dimensions for the game
@@ -19,19 +21,23 @@ def main():
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
 
-    #create 2 groups named updatable and drawable
+    #create groups for sprites
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
+    shots = pygame.sprite.Group()
 
-    #set both groups as containers for the Player class
+    #set updatable/drawable groups as containers for the Player class
     Player.containers = (updatable, drawable)
 
-    #set all groups as containers for the Asteroid class
+    #set asteroids, updatable, and drawable groups as containers for the Asteroid class
     Asteroid.containers = (asteroids, updatable, drawable)
 
     #set the updatable group as the container for the AsteroidField Class
     AsteroidField.containers = (updatable)
+
+    #set the shots, updatable, and drawable groups as the container for the Shot class
+    Shot.containers = (shots, updatable, drawable)
 
     #create an object of the player class
     player = Player(x, y)
@@ -50,10 +56,18 @@ def main():
         #call the update method to allow for player turning using the updatable container
         updatable.update(dt)
 
+        #iterates over the asteroid group and exits the game if the player collides with an asteroid
         for asteroid in asteroids:
-            asteroid.collision(player)
-            print("Game over!")
-            sys.exit()
+            if asteroid.collision(player):
+                print("Game over!")
+                sys.exit()
+
+        #iterates over the asteroid group to check for collision with bullets
+        for asteroid in asteroids:
+            for shot in shots:
+                if shot.collision(asteroid):
+                    shot.kill()
+                    asteroid.split()
 
         #color the GUI black
         screen.fill("black")
