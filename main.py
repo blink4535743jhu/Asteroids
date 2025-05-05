@@ -1,6 +1,9 @@
 # this allows us to use code from the open-source library throughout this file
 import pygame
 
+#allows me to call a method to exit my game
+import sys
+
 #import the variables from constants.py and player / asteroid classes
 from constants import *
 from player import *
@@ -46,6 +49,11 @@ def main():
         
         #call the update method to allow for player turning using the updatable container
         updatable.update(dt)
+
+        for asteroid in asteroids:
+            asteroid.collision(player)
+            print("Game over!")
+            sys.exit()
 
         #color the GUI black
         screen.fill("black")
